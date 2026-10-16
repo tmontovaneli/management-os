@@ -4,6 +4,8 @@ A personal operating system for engineering managers: a folder of plain markdown
 notes and HTML reports, organised around a **cadence** of daily, weekly, monthly and
 quarterly routines, plus Claude Code skills that do the repetitive parts for you.
 
+**[See what it looks like →](https://tmontovaneli.github.io/management-os/)**
+
 - **One rhythm:** `manager-cadence.html` lists what to do and when, tagged by area:
   People, Delivery, Stakeholder and Strategy.
 - **One place to write it down:** notes per direct report, stakeholder and initiative,
@@ -19,8 +21,8 @@ Requirements: **Python 3.8+**. Git and [Claude Code](https://claude.com/claude-c
 are optional, but you need Claude Code to use the skills.
 
 ```bash
-git clone https://github.com/<owner>/management_os.git
-cd management_os
+git clone https://github.com/tmontovaneli/management-os.git
+cd management-os
 python3 setup_management_os.py
 ```
 
