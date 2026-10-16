@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Management OS</title>
+<meta name="description" content="A cadence, a folder of plain notes and Claude Code skills for engineering managers. Plan your week from your routines and get a morning briefing from Jira, Slack, email, calendar and GitHub.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a planner page. The hero pairs the promise with a real week file; the cadence board is the centrepiece. */
+:root {
+  --paper: #f3f5f8;
+  --surface: #ffffff;
+  --ink: #121826;
+  --ink-2: #465062;
+  --ink-3: #5f6a7d;
+  --line: #dde2ea;
+  --accent: #1d4ed8;
+  --people-bg: #e6f1fb; --people: #185fa5;
+  --delivery-bg: #eaf3de; --delivery: #3b6d11;
+  --stakeholder-bg: #faeeda; --stakeholder: #854f0b;
+  --strategy-bg: #eeedfe; --strategy: #534ab7;
+
+  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --body: "Hanken Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  --step--1: 0.8125rem;
+  --step-0: 1rem;
+  --step-1: 1.1875rem;
+  --step-2: 1.5rem;
+  --step-3: clamp(1.75rem, 1.3rem + 2vw, 2.5rem);
+  --step-4: clamp(2.4rem, 1.4rem + 4.6vw, 4.25rem);
+  --radius: 12px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0e1218; --surface: #161b23; --ink: #edf0f5; --ink-2: #aab3c2; --ink-3: #8b95a7;
+    --line: #283041; --accent: #93b2ff;
+    --people-bg: #0c447c; --people: #b5d4f4;
+    --delivery-bg: #27500a; --delivery: #c0dd97;
+    --stakeholder-bg: #633806; --stakeholder: #fac775;
+    --strategy-bg: #3c3489; --strategy: #cecbf6;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0e1218; --surface: #161b23; --ink: #edf0f5; --ink-2: #aab3c2; --ink-3: #8b95a7;
+  --line: #283041; --accent: #93b2ff;
+  --people-bg: #0c447c; --people: #b5d4f4;
+  --delivery-bg: #27500a; --delivery: #c0dd97;
+  --stakeholder-bg: #633806; --stakeholder: #fac775;
+  --strategy-bg: #3c3489; --strategy: #cecbf6;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: var(--step-0);
+  line-height: 1.6;
+}
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+h1, h2, h3 { font-family: var(--display); line-height: 1.08; margin: 0; text-wrap: balance; letter-spacing: -0.015em; }
+p { margin: 0; }
+code, .mono { font-family: var(--mono); }
+
+.wrap {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.band { padding-block: clamp(56px, 8vw, 104px); }
+.band + .band { border-top: 1px solid var(--line); }
+.eyebrow {
+  font-size: var(--step--1); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--ink-3);
+}
+.section-head { display: grid; gap: 12px; max-width: 62ch; margin-bottom: 40px; }
+.section-head h2 { font-size: var(--step-3); font-weight: 700; }
+.section-head p { color: var(--ink-2); font-size: var(--step-1); }
+
+/* Header */
+.top { padding-block: 20px; }
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 700; font-size: 1.125rem; color: var(--ink); text-decoration: none; }
+.glyph { display: grid; grid-template-columns: repeat(2, 9px); gap: 3px; }
+.glyph i { width: 9px; height: 9px; border-radius: 2px; display: block; }
+.glyph i:nth-child(1) { background: var(--people); }
+.glyph i:nth-child(2) { background: var(--delivery); }
+.glyph i:nth-child(3) { background: var(--stakeholder); }
+.glyph i:nth-child(4) { background: var(--strategy); }
+.top nav { display: flex; gap: 20px; flex-wrap: wrap; font-size: 0.9375rem; }
+.top nav a { color: var(--ink-2); text-decoration: none; }
+.top nav a:hover { color: var(--ink); }
+
+/* Hero */
+.hero { padding-block: clamp(32px, 6vw, 72px) clamp(56px, 8vw, 96px); }
+.hero .wrap { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); gap: clamp(32px, 5vw, 64px); align-items: center; }
+.hero h1 { font-size: var(--step-4); font-weight: 800; margin: 14px 0 20px; }
+.hero h1 .beat { color: var(--accent); }
+.lede { font-size: var(--step-1); color: var(--ink-2); max-width: 54ch; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; align-items: stretch; }
+
+.cmd {
+  display: flex; align-items: center; gap: 4px; min-width: 0; max-width: 100%;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+  padding: 6px 6px 6px 14px; font-family: var(--mono); font-size: 0.875rem;
+}
+.cmd code { overflow-x: auto; white-space: nowrap; min-width: 0; color: var(--ink); }
+.cmd code::before { content: "$ "; color: var(--ink-3); }
+.copy {
+  flex-shrink: 0; border: 0; border-radius: 7px; padding: 7px 12px; cursor: pointer;
+  background: var(--ink); color: var(--paper); font: 600 0.8125rem var(--body);
+}
+.copy:hover { opacity: 0.88; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 10px;
+  border: 1px solid var(--line); color: var(--ink); text-decoration: none; font-weight: 600; background: transparent;
+}
+.btn:hover { border-color: var(--ink-3); }
+
+/* Week file card */
+.sheet {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  font-family: var(--mono); font-size: 0.8125rem; line-height: 1.75; min-width: 0;
+  box-shadow: 0 1px 0 var(--line), 0 24px 48px -32px rgba(18, 24, 38, 0.35);
+}
+.sheet-bar { display: flex; justify-content: space-between; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--line); color: var(--ink-3); font-size: 0.75rem; }
+.sheet-body { padding: 16px 18px 20px; overflow-x: auto; }
+.sheet-body .h1 { font-weight: 500; color: var(--ink); }
+.sheet-body .h2 { color: var(--accent); margin-top: 12px; }
+.sheet-body .muted { color: var(--ink-3); }
+.task { display: flex; gap: 8px; white-space: nowrap; color: var(--ink-2); }
+.box { color: var(--ink-3); }
+.task.done .box { color: var(--delivery); }
+.task.done .t { text-decoration: line-through; text-decoration-color: var(--ink-3); color: var(--ink-3); }
+
+/* Cadence board */
+.legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+.legend button {
+  display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+  border-radius: 999px; padding: 6px 14px 6px 10px; font: 500 0.875rem var(--body);
+}
+.legend button[aria-pressed="false"] { opacity: 0.45; }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+.dot.people { background: var(--people); }
+.dot.delivery { background: var(--delivery); }
+.dot.stakeholder { background: var(--stakeholder); }
+.dot.strategy { background: var(--strategy); }
+
+.board { border-top: 1px solid var(--line); }
+.row { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 20px; padding-block: 22px; border-bottom: 1px solid var(--line); }
+.freq h3 { font-size: var(--step-2); font-weight: 700; }
+.freq span { font-size: var(--step--1); color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; align-content: flex-start; }
+.chip {
+  border-radius: 8px; padding: 6px 12px; font-size: 0.9375rem; font-weight: 500;
+  transition: opacity 160ms ease;
+}
+.chip.people { background: var(--people-bg); color: var(--people); }
+.chip.delivery { background: var(--delivery-bg); color: var(--delivery); }
+.chip.stakeholder { background: var(--stakeholder-bg); color: var(--stakeholder); }
+.chip.strategy { background: var(--strategy-bg); color: var(--strategy); }
+.chip.dim { opacity: 0.18; }
+.board-note { margin-top: 16px; color: var(--ink-3); font-size: 0.9375rem; }
+
+/* Steps */
+.steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; counter-reset: step; }
+.step { display: grid; gap: 10px; align-content: start; }
+.step::before {
+  counter-increment: step; content: counter(step);
+  font-family: var(--display); font-weight: 800; font-size: 2.25rem; line-height: 1; color: var(--accent);
+}
+.step h3 { font-size: var(--step-1); font-weight: 700; }
+.step p { color: var(--ink-2); }
+
+/* Skills */
+.skills { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.skill { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; display: grid; gap: 12px; align-content: start; }
+.skill-name { font-family: var(--mono); font-size: 0.875rem; color: var(--ink-3); }
+.skill.wide { grid-column: 1 / -1; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); column-gap: 32px; }
+.skill.wide .skill-name, .skill.wide .say { grid-column: 1; }
+.skill.wide p:not(.say), .skill.wide .out { grid-column: 2; }
+.skill.wide .skill-name { grid-row: 1; }
+.skill.wide .say { grid-row: 2 / span 2; }
+.skill.wide p:not(.say) { grid-row: 1 / span 2; }
+.skill.wide .out { grid-row: 3; }
+.new-role, .tag-sprint { font-family: var(--body); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--people); background: var(--people-bg); border-radius: 6px; padding: 2px 8px; margin-left: 8px; }
+.tag-sprint { color: var(--delivery); background: var(--delivery-bg); }
+.say { font-family: var(--display); font-size: var(--step-2); font-weight: 700; line-height: 1.15; }
+.say::before { content: "\201C"; color: var(--ink-3); }
+.say::after { content: "\201D"; color: var(--ink-3); }
+.skill p { color: var(--ink-2); }
+.skill p.say { color: var(--ink); }
+.out { font-family: var(--mono); font-size: 0.8125rem; color: var(--ink-3); border-top: 1px dashed var(--line); padding-top: 12px; overflow-x: auto; white-space: nowrap; }
+.out b { font-weight: 500; color: var(--ink-2); }
+
+/* Pulse example */
+.pulse { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: clamp(32px, 5vw, 64px); align-items: start; }
+.pulse .section-head { margin-bottom: 0; }
+.briefing { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 24px; display: grid; gap: 18px; min-width: 0; }
+.briefing-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: baseline; }
+.briefing-head h3 { font-size: var(--step-1); font-weight: 700; }
+.tag-example { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--stakeholder); background: var(--stakeholder-bg); border-radius: 6px; padding: 2px 8px; }
+.needs { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.needs li { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 12px; align-items: baseline; }
+.src { font-family: var(--mono); font-size: 0.75rem; color: var(--ink-3); }
+.needs .act { display: block; color: var(--ink-2); font-size: 0.9375rem; }
+.today { border-top: 1px solid var(--line); padding-top: 16px; color: var(--ink-2); font-size: 0.9375rem; }
+.today b { color: var(--ink); font-weight: 600; }
+
+/* Files + principles */
+.split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 64px); align-items: start; }
+.tree { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 22px; font-family: var(--mono); font-size: 0.8125rem; line-height: 1.8; overflow-x: auto; white-space: pre; color: var(--ink); margin: 0; }
+.tree .c { color: var(--ink-3); }
+.principles { display: grid; gap: 28px; }
+.principle h3 { font-size: var(--step-1); font-weight: 700; margin-bottom: 6px; }
+.principle p { color: var(--ink-2); }
+
+.support { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--line); }
+.support h3 { font-family: var(--body); font-size: var(--step--1); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 8px; }
+.support p { color: var(--ink-2); }
+
+/* Closing */
+.closing .wrap { display: grid; gap: 20px; justify-items: start; }
+.closing h2 { font-size: var(--step-3); font-weight: 800; max-width: 22ch; }
+.closing p { color: var(--ink-2); font-size: var(--step-1); max-width: 56ch; }
+footer { padding-block: 28px 40px; border-top: 1px solid var(--line); color: var(--ink-3); font-size: 0.875rem; }
+footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+footer a { color: var(--ink-2); }
+
+/* Reports */
+.reports { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(16px, 3vw, 32px); margin: 0; }
+.report { margin: 0; display: grid; gap: 20px; align-content: start; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(16px, 2.5vw, 24px); }
+.report figcaption { display: grid; gap: 4px; }
+.report h3 { font-size: var(--step-2); font-weight: 700; }
+.report-meta { font-family: var(--mono); font-size: 0.8125rem; color: var(--ink-3); }
+.report p:not(.report-meta) { color: var(--ink-2); margin-top: 6px; }
+.report-shot { position: relative; display: block; aspect-ratio: 4 / 5; overflow: hidden; border: 1px solid var(--line); border-radius: 8px; background: #f4f3ef; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.report-shot img { display: block; width: 100%; height: auto; }
+.report-shot::after { content: ""; position: absolute; inset: auto 0 0 0; height: 30%; background: linear-gradient(to bottom, rgb(244 243 239 / 0), #f4f3ef); }
+.report-shot:hover { transform: translateY(-3px); box-shadow: 0 14px 32px rgb(18 24 38 / 0.12); }
+.reports-more { margin-top: 32px; color: var(--ink-2); max-width: 62ch; }
+@media (max-width: 520px) { .reports { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: reduce) { .report-shot { transition: none; } .report-shot:hover { transform: none; } }
+
+@media (max-width: 860px) {
+  .hero .wrap, .pulse, .split { grid-template-columns: minmax(0, 1fr); }
+  .steps, .support { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .skills { grid-template-columns: minmax(0, 1fr); }
+  .skill.wide { grid-template-columns: minmax(0, 1fr); }
+  .skill.wide > * { grid-column: 1 !important; grid-row: auto !important; }
+  .row { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .freq { display: flex; align-items: baseline; gap: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .chip { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Management OS, back to top">
+      <span class="glyph" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      Management OS
+    </a>
+    <nav aria-label="Sections">
+      <a href="#cadence">Cadence</a>
+      <a href="#skills">Skills</a>
+      <a href="#start">Get started</a>
+      <a class="repo-link" href="https://github.com/OWNER/management_os">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">For engineering managers · Works with Claude Code</p>
+        <h1>Run your team on a rhythm, <span class="beat">not on memory.</span></h1>
+        <p class="lede">Management OS gives you a cadence of daily, weekly, monthly and quarterly routines, a folder of plain notes to record them in, and Claude Code skills that plan your week and brief you every morning.</p>
+        <div class="actions">
+          <div class="cmd">
+            <code class="clone-cmd">git clone https://github.com/OWNER/management_os.git</code>
+            <button class="copy" type="button" data-copy=".clone-cmd">Copy</button>
+          </div>
+          <a class="btn repo-link" href="https://github.com/OWNER/management_os">View on GitHub</a>
+        </div>
+      </div>
+
+      <figure class="sheet" aria-label="Example weekly journal file" style="margin:0">
+        <div class="sheet-bar"><span>my_performance/weeks/2026-W43.md</span><span>Mon</span></div>
+        <div class="sheet-body">
+          <div class="h1"># Week 43 · 19–23 October 2026</div>
+          <div class="muted">Month: [October 2026](../journal-2026-10.md)</div>
+          <div class="h2">## Focus</div>
+          <div>1. Growth goals agreed with João and Mia</div>
+          <div>2. Q4 goal setting kicked off with the team</div>
+          <div>3. Roadmap review taken into the stakeholder sync</div>
+          <div class="h2">## This week</div>
+          <div class="task" data-tick><span class="box">- [ ]</span><span class="t">1:1s with direct reports · João Silva</span></div>
+          <div class="task" data-tick><span class="box">- [ ]</span><span class="t">1:1s with direct reports · Mia Chen</span></div>
+          <div class="task"><span class="box">- [ ]</span><span class="t">Sprint health check</span></div>
+          <div class="task"><span class="box">- [ ]</span><span class="t">Team recognition</span></div>
+          <div class="h2">## Monday 19 October</div>
+          <div class="task" data-tick><span class="box">- [ ]</span><span class="t">Morning team pulse</span></div>
+          <div class="task"><span class="box">- [ ]</span><span class="t">Protect deep work time</span></div>
+          <div class="muted">**Win:** &nbsp;**Risk:**</div>
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <section class="band" id="cadence" aria-labelledby="cadence-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">The cadence</p>
+        <h2 id="cadence-title">Twenty-nine routines, each with a frequency and an owner area.</h2>
+        <p>Setup builds your cadence from your answers: your team, your tech stack, your company values. These are the routines it starts you with. Edit them freely; the skills read whatever is there.</p>
+      </div>
+
+      <div class="legend" role="group" aria-label="Show routines by area">
+        <button type="button" data-cat="people" aria-pressed="true"><span class="dot people"></span>People</button>
+        <button type="button" data-cat="delivery" aria-pressed="true"><span class="dot delivery"></span>Delivery</button>
+        <button type="button" data-cat="stakeholder" aria-pressed="true"><span class="dot stakeholder"></span>Stakeholder</button>
+        <button type="button" data-cat="strategy" aria-pressed="true"><span class="dot strategy"></span>Strategy</button>
+      </div>
+
+      <div class="board">
+        <div class="row">
+          <div class="freq"><h3>Daily</h3><span>6 routines</span></div>
+          <div class="chips">
+            <span class="chip delivery">Morning team pulse</span>
+            <span class="chip strategy">Protect deep work time</span>
+            <span class="chip delivery">End-of-day wrap</span>
+            <span class="chip stakeholder">Intentional visibility</span>
+            <span class="chip strategy">Read team PRs</span>
+            <span class="chip delivery">Email triage</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="freq"><h3>Weekly</h3><span>8 routines</span></div>
+          <div class="chips">
+            <span class="chip people">1:1s with direct reports</span>
+            <span class="chip delivery">Sprint health check</span>
+            <span class="chip stakeholder">Weekly status update</span>
+            <span class="chip people">Team recognition</span>
+            <span class="chip strategy">Friday priorities review</span>
+            <span class="chip delivery">Clear open loops</span>
+            <span class="chip strategy">Technical reading block</span>
+            <span class="chip stakeholder">Managing up</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="freq"><h3>Monthly</h3><span>6 routines</span></div>
+          <div class="chips">
+            <span class="chip people">Career conversations</span>
+            <span class="chip delivery">Roadmap review</span>
+            <span class="chip stakeholder">Stakeholder sync</span>
+            <span class="chip people">Hiring pipeline check</span>
+            <span class="chip strategy">Retro with yourself</span>
+            <span class="chip strategy">Technical learning pair</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="freq"><h3>Quarterly</h3><span>9 routines</span></div>
+          <div class="chips">
+            <span class="chip people">Performance reviews</span>
+            <span class="chip strategy">OKR / goal setting</span>
+            <span class="chip people">Team health survey</span>
+            <span class="chip strategy">Tech strategy review</span>
+            <span class="chip stakeholder">Stakeholder calibration</span>
+            <span class="chip strategy">Your own development</span>
+            <span class="chip strategy">Technical mini-project</span>
+            <span class="chip strategy">Topic rotation</span>
+            <span class="chip people">Team working agreement</span>
+          </div>
+        </div>
+      </div>
+      <p class="board-note">Routines that mention your direct reports become one task per person when your week is planned.</p>
+    </div>
+  </section>
+
+  <section class="band" id="start" aria-labelledby="start-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Get started</p>
+        <h2 id="start-title">From clone to your first planned week.</h2>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <h3>Clone and run setup</h3>
+          <p>Answer a few questions about you, your manager, your direct reports and the tools your team uses. Python 3.8 or later, nothing to install.</p>
+          <div class="cmd"><code>python3 setup_management_os.py</code></div>
+        </div>
+        <div class="step">
+          <h3>Get your workspace</h3>
+          <p>A git repository of markdown notes and HTML reports, already filled in with your people, stakeholders and initiatives, plus your personal cadence.</p>
+        </div>
+        <div class="step">
+          <h3>Open it in Claude Code</h3>
+          <p>Setup offers to continue there: connect your tools, pick a report design, and plan your first week.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="skills" aria-labelledby="skills-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Claude Code skills</p>
+        <h2 id="skills-title">Ask in plain words. The skills do the bookkeeping.</h2>
+        <p>Every workspace ships with seven skills. They read your cadence and notes, and write back to plain files you can open in any editor.</p>
+      </div>
+      <div class="skills">
+        <article class="skill">
+          <span class="skill-name">plan-week</span>
+          <p class="say">plan my week</p>
+          <p>Builds the week's journal from your cadence: daily tasks for each working day, weekly tasks with one 1:1 per report, monthly and quarterly items you haven't done yet, and anything left over from last week. Suggests a focus that serves the month's intentions.</p>
+          <div class="out"><b>writes</b> my_performance/weeks/2026-W43.md</div>
+        </article>
+        <article class="skill">
+          <span class="skill-name">morning-pulse</span>
+          <p class="say">morning pulse</p>
+          <p>A two-minute briefing, blockers first: today's calendar with 1:1 prep, Jira issues that are stuck, PRs from your reports, Slack and email waiting on you, and today's tasks.</p>
+          <div class="out"><b>writes</b> a short summary under today's notes</div>
+        </article>
+        <article class="skill wide">
+          <span class="skill-name">sprint-goals<span class="tag-sprint">Every sprint</span></span>
+          <p class="say">sprint check-in</p>
+          <p>Records the goals and owners your team sets at sprint planning. Halfway through, the check-in catches goals that are off track, already achieved or need realigning, and records what the team decided. At the end, the final check records what was accomplished. Then it builds the sprint report for stakeholders: what the team achieved, and what it focuses on next sprint.</p>
+          <div class="out"><b>writes</b> team_performance/sprints/2026-10-12-sprint-42.md · sprint report</div>
+        </article>
+        <article class="skill">
+          <span class="skill-name">connect-tools</span>
+          <p class="say">connect my tools</p>
+          <p>Connects Jira, Slack, Gmail, Google Calendar and GitHub one at a time. You pick the board, channels and repos from lists, confirm each report's accounts, and every connection gets a test read.</p>
+          <div class="out"><b>writes</b> .management_os.json (IDs only, no secrets)</div>
+        </article>
+        <article class="skill">
+          <span class="skill-name">report-templates</span>
+          <p class="say">set up my report design</p>
+          <p>Choose one of five design presets or bring your own colours, fonts and logo. The design applies to every report, and new templates come from a catalogue of twelve common manager reports.</p>
+          <div class="out"><b>writes</b> reports/my_report_design.html</div>
+        </article>
+        <article class="skill wide">
+          <span class="skill-name">team-metrics</span>
+          <p class="say">team metrics for last sprint</p>
+          <p>Collects each direct report's activity for a sprint, month or quarter: tickets created, closed and in progress from Jira, and commits and PRs created, merged, reviewed and commented on from GitHub. Compares each person with their own earlier periods, never with each other, and asks what the numbers don't show before you use them.</p>
+          <div class="out"><b>writes</b> team_performance/metrics/2026-09-01_2026-09-30.md</div>
+        </article>
+        <article class="skill wide">
+          <span class="skill-name">first-90-days<span class="new-role">New in the role</span></span>
+          <p class="say">plan my first 90 days</p>
+          <p>Builds your own 30/60/90-day plan from the situation you're walking into, with the conversations to have with your boss, a listening tour of your team and stakeholders, early wins and team assessment. Prepares each first meeting, records what you learn in each person's notes, and runs checkpoint reviews at days 30, 60 and 90. Based on the ideas in <cite>The First 90 Days</cite> by Michael D. Watkins.</p>
+          <div class="out"><b>writes</b> my_performance/first-90-days/plan.md</div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="reports" aria-labelledby="reports-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Reports</p>
+        <h2 id="reports-title">Reports people actually read, ready to fill in.</h2>
+        <p>Self-contained HTML in your colours, fonts and logo. Open one in a browser, click any text to edit it, then print to PDF.</p>
+      </div>
+      <div class="reports">
+        <figure class="report">
+          <figcaption>
+            <h3>Team update</h3>
+            <p class="report-meta">Weekly · for your manager and stakeholders</p>
+            <p>A personal note, the week's priorities, risks, your impact as a manager, delivery and a line per person.</p>
+          </figcaption>
+          <a class="report-shot" href="img/report-weekly.webp" target="_blank" rel="noopener" aria-label="Team update example, full size">
+            <img src="img/report-weekly.webp" width="1760" height="3536" loading="lazy" alt="Example Team update, filled in with made-up names">
+          </a>
+        </figure>
+        <figure class="report">
+          <figcaption>
+            <h3>Sprint report</h3>
+            <p class="report-meta">Every sprint · for stakeholders</p>
+            <p>What the team achieved, what changed mid-sprint and why, and next sprint's goals. Filled in from the sprint-goals check-ins.</p>
+          </figcaption>
+          <a class="report-shot" href="img/report-sprint.webp" target="_blank" rel="noopener" aria-label="Sprint report example, full size">
+            <img src="img/report-sprint.webp" width="1760" height="2575" loading="lazy" alt="Example Sprint report, filled in with made-up names">
+          </a>
+        </figure>
+        <figure class="report">
+          <figcaption>
+            <h3>Monthly individual report</h3>
+            <p class="report-meta">Monthly · one per direct report</p>
+            <p>Highlights, progress on growth goals, feedback shared, energy, and the focus for next month.</p>
+          </figcaption>
+          <a class="report-shot" href="img/report-monthly.webp" target="_blank" rel="noopener" aria-label="Monthly individual report example, full size">
+            <img src="img/report-monthly.webp" width="1760" height="1842" loading="lazy" alt="Example Monthly individual report, filled in with made-up names">
+          </a>
+        </figure>
+        <figure class="report">
+          <figcaption>
+            <h3>Quarterly review</h3>
+            <p class="report-meta">Quarterly · one per direct report</p>
+            <p>The performance review: goals and evidence, strengths, growth areas, values in action, next quarter's goals.</p>
+          </figcaption>
+          <a class="report-shot" href="img/report-quarterly.webp" target="_blank" rel="noopener" aria-label="Quarterly review example, full size">
+            <img src="img/report-quarterly.webp" width="1760" height="2161" loading="lazy" alt="Example Quarterly review, filled in with made-up names">
+          </a>
+        </figure>
+      </div>
+      <p class="reports-more">Need something else? The report-templates skill adds any of eight more from its catalogue, from a 1:1 summary to a promotion case, in the same design.</p>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="pulse-title">
+    <div class="wrap pulse">
+      <div class="section-head">
+        <p class="eyebrow">Morning pulse</p>
+        <h2 id="pulse-title">Unblock before anything else.</h2>
+        <p>The pulse ranks what needs you by who it's blocking, across every connected tool. It only reads. Replies, comments and status changes stay with you.</p>
+      </div>
+      <div class="briefing" aria-label="Example morning pulse">
+        <div class="briefing-head">
+          <h3>Needs you now</h3>
+          <span class="tag-example">Example · names made up</span>
+        </div>
+        <ul class="needs">
+          <li><span class="src">[PR]</span><span>João's payments-retry PR has waited two days for your review<span class="act">→ review before standup</span></span></li>
+          <li><span class="src">[Jira]</span><span>PAY-412 has been blocked on the ledger API for three days (Mia)<span class="act">→ raise it at standup and ping the ledger team</span></span></li>
+          <li><span class="src">[Slack]</span><span>Priya asked about the API deadline in #team-payments, no reply yet<span class="act">→ answer before 10:00</span></span></li>
+          <li><span class="src">[Email]</span><span>Two access requests waiting for your approval<span class="act">→ approve or decline today</span></span></li>
+        </ul>
+        <p class="today"><b>Today:</b> 4 meetings. 1:1 with Mia at 11:00, with an open action on her promotion doc. Best deep-work block: 14:00–16:00.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="files-title">
+    <div class="wrap">
+      <div class="split">
+        <div>
+          <div class="section-head">
+            <p class="eyebrow">What you get</p>
+            <h2 id="files-title">Plain files, organised around the people you manage.</h2>
+          </div>
+<pre class="tree">your_workspace/
+  manager-cadence.html     <span class="c">your rhythm</span>
+  direct_reports/
+    joao_silva/notes.md    <span class="c">1:1s, goals, feedback</span>
+  team_performance/
+    sprints.md             <span class="c">sprint health log</span>
+    sprints/               <span class="c">goals, check-ins, reports</span>
+    metrics/               <span class="c">activity per period</span>
+  initiatives/             <span class="c">one file per project</span>
+  stakeholders/            <span class="c">one file per person</span>
+  my_performance/
+    weeks/2026-W43.md      <span class="c">weekly journal</span>
+    journal-2026-10.md     <span class="c">intentions + retro</span>
+  reports/
+    my_report_design.html  <span class="c">colours, fonts, logo</span>
+    templates/             <span class="c">team update, sprint, reviews</span>
+  skills/                  <span class="c">the seven skills</span></pre>
+        </div>
+        <div class="principles">
+          <div class="principle">
+            <h3>Yours, on disk</h3>
+            <p>Markdown and self-contained HTML in a git repository you own. No server, no database, no account to create. Open a report in a browser, edit it, print to PDF.</p>
+          </div>
+          <div class="principle">
+            <h3>Read-only by design</h3>
+            <p>The skills read Jira, Slack, email, your calendar and GitHub. They never send a message, post a comment or move a ticket.</p>
+          </div>
+          <div class="principle">
+            <h3>No secrets in the workspace</h3>
+            <p>You sign in to each tool in your browser. The workspace only stores IDs and settings, like which board and which channels.</p>
+          </div>
+          <div class="principle">
+            <h3>Made for real teams</h3>
+            <p>Notes about people deserve care. Keep your workspace in a private repository and connect only the tools your company allows.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="support">
+        <div>
+          <h3>Requires</h3>
+          <p>Python 3.8 or later. Claude Code for the skills. Git if you want version history.</p>
+        </div>
+        <div>
+          <h3>Connects to</h3>
+          <p>Jira Cloud, Slack, Gmail and Google Calendar, GitHub.</p>
+        </div>
+        <div>
+          <h3>Not yet</h3>
+          <p>Outlook and Microsoft 365, GitLab, Bitbucket, Linear, Teams.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band closing" aria-labelledby="closing-title">
+    <div class="wrap">
+      <h2 id="closing-title">Your next week, planned from your own cadence.</h2>
+      <p>Clone the repository, run setup, and say "plan my week".</p>
+      <div class="cmd">
+        <code class="setup-cmd">git clone https://github.com/OWNER/management_os.git &amp;&amp; cd management_os &amp;&amp; python3 setup_management_os.py</code>
+        <button class="copy" type="button" data-copy=".setup-cmd">Copy</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Management OS</span>
+    <a class="repo-link" href="https://github.com/OWNER/management_os">Source on GitHub</a>
+  </div>
+</footer>
+
+<script>
+  // Copy buttons: copy the command next to them, fall back to selecting it.
+  document.querySelectorAll(".copy").forEach(function (button) {
+    button.addEventListener("click", function () {
+      var target = document.querySelector(button.dataset.copy);
+      var text = target.textContent;
+      var done = function () {
+        button.textContent = "Copied";
+        setTimeout(function () { button.textContent = "Copy"; }, 1600);
+      };
+      var select = function () {
+        var range = document.createRange();
+        range.selectNodeContents(target);
+        var selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        button.textContent = "Selected";
+        setTimeout(function () { button.textContent = "Copy"; }, 1600);
+      };
+      try {
+        navigator.clipboard.writeText(text).then(done, select);
+      } catch (error) {
+        select();
+      }
+    });
+  });
+
+  // Cadence legend: toggle which areas are highlighted.
+  document.querySelectorAll(".legend button").forEach(function (button) {
+    button.addEventListener("click", function () {
+      var on = button.getAttribute("aria-pressed") !== "true";
+      button.setAttribute("aria-pressed", String(on));
+      document.querySelectorAll(".chip." + button.dataset.cat).forEach(function (chip) {
+        chip.classList.toggle("dim", !on);
+      });
+    });
+  });
+
+  // Hero: tick off the first tasks of the week, one by one.
+  (function () {
+    var tasks = document.querySelectorAll("[data-tick]");
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    tasks.forEach(function (task, i) {
+      var tick = function () {
+        task.classList.add("done");
+        task.querySelector(".box").textContent = "- [x]";
+      };
+      if (reduce) tick(); else setTimeout(tick, 700 + i * 650);
+    });
+  })();
+</script>
+</body>
+</html>
