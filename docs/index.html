@@ -195,8 +195,9 @@ code, .mono { font-family: var(--mono); }
 .skill.wide .say { grid-row: 2 / span 2; }
 .skill.wide p:not(.say) { grid-row: 1 / span 2; }
 .skill.wide .out { grid-row: 3; }
-.new-role, .tag-sprint { font-family: var(--body); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--people); background: var(--people-bg); border-radius: 6px; padding: 2px 8px; margin-left: 8px; }
+.new-role, .tag-sprint, .tag-coach { font-family: var(--body); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--people); background: var(--people-bg); border-radius: 6px; padding: 2px 8px; margin-left: 8px; }
 .tag-sprint { color: var(--delivery); background: var(--delivery-bg); }
+.tag-coach { color: var(--strategy); background: var(--strategy-bg); }
 .say { font-family: var(--display); font-size: var(--step-2); font-weight: 700; line-height: 1.15; }
 .say::before { content: "\201C"; color: var(--ink-3); }
 .say::after { content: "\201D"; color: var(--ink-3); }
@@ -424,9 +425,15 @@ footer a { color: var(--ink-2); }
       <div class="section-head">
         <p class="eyebrow">Claude Code skills</p>
         <h2 id="skills-title">Ask in plain words. The skills do the bookkeeping.</h2>
-        <p>Every workspace ships with seven skills. They read your cadence and notes, and write back to plain files you can open in any editor.</p>
+        <p>Every workspace ships with eight skills. They read your cadence and notes, and write back to plain files you can open in any editor.</p>
       </div>
       <div class="skills">
+        <article class="skill wide">
+          <span class="skill-name">coach<span class="tag-coach">On by default</span></span>
+          <p class="say">assist mode, I'm tired</p>
+          <p>By default the AI coaches you. After you've given your input, it raises up to three challenges, each tied to something in your notes: a focus that serves none of your month's goals, a direct report you haven't had a 1:1 with in three weeks, a sprint goal with no way to tell it's done. That's demanding, so on a tired day switch to Assist mode, keep coaching for rituals only, or tell plan-week your energy is low this week.</p>
+          <div class="out"><b>levels</b> always · rituals · off (Assist mode)</div>
+        </article>
         <article class="skill">
           <span class="skill-name">plan-week</span>
           <p class="say">plan my week</p>
@@ -573,7 +580,7 @@ footer a { color: var(--ink-2); }
   reports/
     my_report_design.html  <span class="c">colours, fonts, logo</span>
     templates/             <span class="c">team update, sprint, reviews</span>
-  skills/                  <span class="c">the seven skills</span></pre>
+  skills/                  <span class="c">the eight skills</span></pre>
         </div>
         <div class="principles">
           <div class="principle">

@@ -92,6 +92,16 @@ The plan is the hub; the details live where they already belong in the workspace
 6. Append the review under "## Checkpoint reviews" in the plan (dated, 5–10 lines), after the user agrees.
 7. Suggest the agenda for the next conversation with the boss.
 
+## Coach mode
+
+Follow [coaching.md](../coach/coaching.md) for the level in effect and how to challenge (at most
+three challenges, after the work, each grounded in a file). In this skill, look for:
+- **Diagnosis:** a situation (STARS) still marked as a hypothesis after day 30, or never agreed with the boss.
+- **Listening tour:** key people not met by the end of the Learn phase; themes heard from several people that
+  aren't in the plan yet.
+- **Early wins:** wins that matter to the user but not to the boss or the team; no early win planned by day 60.
+- **Traps:** the common transition traps in framework.md, linked to what the plan and notes show.
+
 ## Rules
 
 - **Diagnose before prescribing.** Until the situation is agreed with the boss, present ideas as

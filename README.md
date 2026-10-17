@@ -12,6 +12,8 @@ quarterly routines, plus Claude Code skills that do the repetitive parts for you
   weekly and monthly journals, sprint goals and sprint health.
 - **Skills that keep it going:** plan your week from the cadence, get a morning briefing
   from Jira, Slack, email, calendar and GitHub, and produce branded reports.
+- **A coach, when you want one:** the AI challenges your inputs and connects them with what it
+  already knows, so you go the extra mile. On a tired day, switch to Assist mode.
 
 Everything is local files in a git repository you own. No server, no database.
 
@@ -35,6 +37,7 @@ Setup asks about:
 - your tech stack, company values and sprint length (these personalise the cadence)
 - which tools your team uses: Jira, Slack, Gmail + Google Calendar, GitHub
 - whether you're new in the role (then it offers to plan your first 90 days)
+- how much the AI should challenge you: always, only in rituals, or never (Assist mode)
 - where to create the workspace, and whether to make it a git repository
 
 Then it creates your workspace, registers the tools it can, and offers to continue in
@@ -80,6 +83,7 @@ your_workspace/
     templates/                team update (weekly), sprint report, monthly and quarterly individual reports
     assets/
   skills/                     the skills below (.claude/skills points here)
+  CLAUDE.md                   how the AI works in your workspace, including coaching
   .management_os.json         your setup answers and tool settings (no secrets)
 ```
 
@@ -98,8 +102,28 @@ with `/<name>`.
 | `sprint-goals` | "record sprint goals", "sprint check-in", "sprint report" | After sprint planning: records each goal and its owners. Halfway: a check-in that catches goals off track, already achieved, or needing realignment. At the end: the final check. Then it builds the sprint report for stakeholders: what the team achieved, and what it focuses on next sprint. Check-in and final check days show up in your week file. |
 | `team-metrics` | "team metrics for last sprint", "Mia's numbers this quarter" | Collects each direct report's activity for a period: tickets created, closed and in progress from Jira; commits and PRs created, merged, reviewed and commented on from GitHub. Saves one table per period, compares each person with their own earlier periods, and asks for the context the numbers miss. No rankings. |
 | `morning-pulse` | "morning pulse" | Read-only daily briefing, blockers first: today's calendar, Jira board, PRs by your reports, Slack and email that need you, and today's journal. |
+| `coach` | "assist mode", "coach me on this" | Sets how much the AI challenges you (see below). |
 | `connect-tools` | "connect my tools" | Connects Jira, Slack, Gmail, Google Calendar and GitHub one at a time, lets you pick the board, channels and repos, matches your reports to their accounts, and tests each connection. |
 | `report-templates` | "set up my report design", "create a report template for …" | Applies your design (five presets, or your own colours, fonts and logo) to every report template, and creates new templates from a catalogue of common manager reports. |
+
+### Coach mode and Assist mode
+
+By default the AI **coaches** you. After you've given your input, it raises up to three
+challenges, each tied to something in your workspace. For example: a focus item that serves none
+of your month's intentions, a direct report you haven't had a 1:1 with in three weeks, a sprint goal with no
+"done when", or a report that lists work but not why it matters. Reply "skip" or "good enough" and it moves on.
+
+That's demanding, so you choose how often it happens:
+
+| Level | Coaching happens in |
+|---|---|
+| `always` *(default)* | everything, including the morning pulse and 1:1 notes |
+| `rituals` | weekly planning, retros, sprint goals, reviews and reports, first-90-days checkpoints |
+| `off` | nowhere: **Assist mode**, with defaults, few questions and no challenges |
+
+- **For today:** say "assist mode", or "coach me on this" for one task.
+- **For a week:** plan-week asks your energy. "Low" turns coaching off for that week, and "high" turns it on everywhere.
+- **From now on:** say "set coaching to rituals" (it's `coaching` in `.management_os.json`).
 
 ### A typical week
 

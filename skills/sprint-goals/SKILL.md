@@ -149,6 +149,19 @@ performance review: read the sprint files for that period. Report the goal hit r
 that were carried over more than once, and what the "What we learned" lines have in common. For one
 person, list the goals they owned and their outcomes, as evidence (quote, don't judge).
 
+## Coach mode
+
+Follow [coaching.md](../coach/coaching.md) for the level in effect and how to challenge (at most
+three challenges, after the work, each grounded in a file). In this skill, look for:
+- **Planning:** goals with no checkable "done when", more goals than the team finished last sprint, one person
+  owning most goals, goals that serve no initiative in `initiatives/`, a goal carried over for the second time.
+- **Check-in:** a status more optimistic than the data (e.g. "On track" with most tickets still to do); a goal
+  at risk with no action, owner and date; a realignment that the affected stakeholder hasn't heard about.
+- **Final check:** the same "what we learned" as earlier sprints, with nothing changed since; achieved goals
+  with no recognition for the owners.
+- **Report:** sections that list work but not why it matters to the reader; no asks when the team is blocked;
+  a missed goal explained without what happens next.
+
 ## Rules
 
 - **The team owns its goals.** Suggest sharper wording, realignment or dropping; never change a

@@ -62,6 +62,10 @@ The script never overwrites an existing week file.
    to include the earlier days too (`--whole-week`) if it's past Monday.
 3. **Days off:** ask once whether they're off on any working day that week (holidays,
    leave). Accept answers like "Wednesday" and turn them into dates.
+   **Energy:** ask "Energy for this week: low, normal or high?" After the script runs, for **low** add
+   `Coaching this week: off (energy: low)` right after the "Month:" and "Sprint:" lines of the week file,
+   and for **high** add `Coaching this week: always (energy: high)`. For normal, add nothing. Skip the
+   question if the user has said they don't want it, and accept "skip".
    Combine steps 1–3 into a single question batch. Use a multiple-choice question tool if you have one.
 4. **Run the script** with the chosen options from the workspace root, and show the
    summary it prints.
@@ -96,6 +100,18 @@ The script never overwrites an existing week file.
    - If the week has days off, which weekly tasks may need to move (e.g. 1:1s).
 9. Tell the user where the files are. Mention that ticking a monthly or quarterly item
    (`- [x]`) removes it from later weeks of that month or quarter.
+
+## Coach mode
+
+Follow [coaching.md](../coach/coaching.md) for the level in effect and how to challenge (at most
+three challenges, after the work, each grounded in a file). In this skill, look for:
+- **Focus vs. intentions:** focus items that serve none of the month's intentions, or intentions with no
+  focus item for two weeks running.
+- **Repeats:** the same focus item or carried-over item for the third week; the same risk in several days' notes.
+- **People:** a direct report with no 1:1 entry in their notes for 2+ weeks, no career conversation this
+  month, or no recognition for a goal they achieved (sprint files).
+- **The Friday review:** "Intended" vs. "Happened" gaps that repeat; turn the pattern into one change for next week.
+- **Month retro:** a "one thing to fix" that's the same as last month's.
 
 ## Drafting the month retro
 

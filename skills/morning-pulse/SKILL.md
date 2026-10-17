@@ -91,6 +91,13 @@ With the user's OK (ask once, the first time; if they say "always", keep doing i
   or email text, and don't record anything sensitive about people. The journal is a git repository.
 - Tick `- [x] Morning team pulse` in today's section.
 
+## Coach mode
+
+Coaching happens here only at the `always` level (see [coaching.md](../coach/coaching.md)), and it stays
+light: **one** challenge at most, at the end of the briefing, about the day ahead. For example, a deep-work
+block cancelled for the third day running, a blocker that has waited longer than the 30-minute rule, a 1:1
+today with open actions from last time, or the day's plan ignoring the week's focus.
+
 ## Rules
 
 - **Read-only.** Never send, reply, react, post, comment, assign, transition, approve,

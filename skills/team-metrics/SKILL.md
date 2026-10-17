@@ -91,6 +91,15 @@ user before it starts if the team is large. Show the summary it prints.
    - **Sprint health log:** if the period is a sprint, fill the empty Committed / Completed columns of its
      row in `team_performance/sprints.md` from Jira, if the user wants.
 
+## Coach mode
+
+Follow [coaching.md](../coach/coaching.md) for the level in effect and how to challenge (at most
+three challenges, after the work, each grounded in a file). In this skill, look for:
+- **Conclusions:** a conclusion the user draws from a number alone; ask what their notes and the sprint files say.
+- **Missing context:** an empty Context section before the numbers are used in a report or a 1:1.
+- **Follow-through:** a pattern noted in an earlier period (in its file or the 1:1 notes) with no action since.
+- **The extra mile:** turning a team pattern (e.g. reviews piling up) into one change the team can try next sprint.
+
 ## Rules
 
 - **Activity, not performance.** These numbers count actions, not impact or quality. A low number has

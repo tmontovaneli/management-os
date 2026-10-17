@@ -9,6 +9,7 @@ one directly with `/<skill-name>`.
 
 | Skill | What it does |
 |---|---|
+| [`coach`](coach/SKILL.md) | Switches between Coach mode (the AI challenges your inputs and connects them with your notes; on by default) and Assist mode (low effort, for tired days). [`coaching.md`](coach/coaching.md) defines the behaviour every skill follows. |
 | [`connect-tools`](connect-tools/SKILL.md) | Connects Jira, Slack, Gmail, Google Calendar and GitHub, and saves which board, channels and repos to use, plus each report's accounts. |
 | [`first-90-days`](first-90-days/SKILL.md) | Plans your own first 90 days in a new role (based on *The First 90 Days* by Michael D. Watkins): diagnosis, boss conversations, listening tour, early wins, checkpoints at days 30/60/90. |
 | [`morning-pulse`](morning-pulse/SKILL.md) | Daily briefing: blockers first, then calendar, Jira, PRs, Slack, email and today's journal. Read-only. |
